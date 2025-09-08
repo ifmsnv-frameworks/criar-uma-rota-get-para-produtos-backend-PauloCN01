@@ -34,8 +34,12 @@ app.get('/', async (req: Request, res: Response) => {
             database: process.env.DBNAME,
             port: Number(process.env.DBPORT)
         })
-        res.send("Conectado ao banco de dados com sucesso!");
+        
+        
+        const produtos = await connection.query("SELECT * FROM produtos")
         await connection.end();
+        
+        res.send(produtos[0])
     }
     catch (error) {
         res.status(500).send("Erro ao conectar ao banco de dados: " + error);
@@ -58,9 +62,23 @@ CREATE TABLE produtos (
 );
 Faz pelo menos 3 inserções nessa tabela
 */ 
+//RESPOSTA ATIVIDADE ROTA
+/*SQL:
 
+use defaultdb;
+CREATE TABLE produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL,
+    urlfoto VARCHAR(255) NOT NULL,
+    descricao TEXT
+);
 
-
+INSERT INTO produtos (`id`, `nome`, `preco`, `urlfoto`, `descricao`)
+ VALUES ('1', 'Arroz', '10.99', 'imagemarroz', 'Grão bom para comer no almoço'),
+('2', 'Carne', '14.99', 'imagemcarne', 'Carne bovina'),
+('3', 'Refrigerante', '6.99', 'imagemrefrigerante', 'Bebida gaseficada com sabores doces');
+ */     
 
 app.listen(8000, () => {
     console.log('Server is running on port 8000');
